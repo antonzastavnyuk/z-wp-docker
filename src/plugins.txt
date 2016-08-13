@@ -1,0 +1,3 @@
+duplicator
+akismet
+wordpress-seo
