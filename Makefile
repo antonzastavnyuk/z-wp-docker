@@ -1,14 +1,5 @@
 # wordpress docker-compose makefile
-
-# MySQL Varibles
-MYSQL_ROOT_PASSWORD = wordpress
-MYSQL_DATABASE = wordpress
-MYSQL_USER = wordpress
-MYSQL_PASSWORD = wordpress
-
-# Container Names
-WORDPRESS_CONTAINER = zi_wordpress
-MYSQL_CONTAINER = zi_mysql
+include .env
 
 .PHONY: up
 

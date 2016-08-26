@@ -1,25 +1,25 @@
 version: '2'
 services:
-  db:
-    image: mysql:5.7
-    container_name: zi_mysql
+  mariadb:
+    image: mariadb:10.1
+    container_name: ${MYSQL_CONTAINER}
     volumes:
       - "./.data/db:/var/lib/mysql"
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: wordpress
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      - back
   wordpress:
+    image: zeroindex/wordpress
+    container_name: ${WORDPRESS_CONTAINER}
     depends_on:
-      - db
-    build:
-      context: ./.wp-cli-entry
-      dockerfile: Dockerfile
-    container_name: zi_wordpress
+      - mariadb
     links:
-      - db
+      - mariadb
     ports:
       - "8000:80"
     volumes:
@@ -27,6 +27,12 @@ services:
       - ./src/uploads:/var/www/html/wp-content/uploads
     restart: always
     environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_PASSWORD: wordpress
-      WP_DEBUG: 'true'
+      - WORDPRESS_DB_HOST=mariadb:3306
+      - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
+      - WP_DEBUG=true
+    networks:
+      - front
+      - back
+networks:
+  front:
+  back:
