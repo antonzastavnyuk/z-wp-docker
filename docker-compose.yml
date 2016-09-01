@@ -21,9 +21,9 @@ services:
     links:
       - mariadb
     ports:
-      - "8000:80"
+      - "${PORT}:80"
     volumes:
-      - ./src/theme:/var/www/html/wp-content/themes/twentysixteen
+      - ./src/theme:/var/www/html/wp-content/themes/${THEME_NAME}
       - ./src/uploads:/var/www/html/wp-content/uploads
     restart: always
     environment:

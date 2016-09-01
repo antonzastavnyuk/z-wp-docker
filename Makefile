@@ -36,11 +36,11 @@ sync_wp :
 install_wp :
 	docker exec $(WORDPRESS_CONTAINER) wp \
 		core install \
-		--url=http://localhost:8000 \
-		--title=z-wordpress-docker \
-		--admin_user=z-dev \
-		--admin_password=z-dev-pass \
-		--admin_email=z-dev@example.com \
+		--url=http://localhost:${PORT} \
+		--title=${WEBSITE_TITLE} \
+		--admin_user=${ADMIN_USER} \
+		--admin_password=${ADMIN_PASS} \
+		--admin_email=${ADMIN_EMAIL} \
 
 install_plugins :
 	while read -r plugin; do \
