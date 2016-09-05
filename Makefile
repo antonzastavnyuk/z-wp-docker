@@ -34,13 +34,12 @@ sync_wp :
 	if make import_db; then make install_plugins; fi
 
 install_wp :
-	docker exec $(WORDPRESS_CONTAINER) wp \
-		core install \
+	docker exec -i $(WORDPRESS_CONTAINER) wp core install \
 		--url=http://localhost:${PORT} \
 		--title=${WEBSITE_TITLE} \
 		--admin_user=${ADMIN_USER} \
 		--admin_password=${ADMIN_PASS} \
-		--admin_email=${ADMIN_EMAIL} \
+		--admin_email=${ADMIN_EMAIL}
 
 install_plugins :
 	while read -r plugin; do \
@@ -51,7 +50,7 @@ install_plugins :
 			--activate ; \
 	done < src/plugins.txt
 
-dump_db:
+dump_db :
 	mkdir -p src/mysql
 	docker exec -i $(MYSQL_CONTAINER) mysqldump \
 		$(MYSQL_DATABASE) \
@@ -59,9 +58,13 @@ dump_db:
 		-uroot \
 		-p$(MYSQL_ROOT_PASSWORD) > src/mysql/database.sql
 
-import_db:
+import_db :
 	docker exec -i $(MYSQL_CONTAINER) \
-		mysql -uroot -p$(MYSQL_ROOT_PASSWORD) $(MYSQL_DATABASE) < src/mysql/database.sql
+	mysql -uroot -p$(MYSQL_ROOT_PASSWORD) $(MYSQL_DATABASE) < src/mysql/database.sql
+
+staging_url :
+	docker exec -i ${WORDPRESS_CONTAINER} \
+	wp search-replace `docker exec -i ${WORDPRESS_CONTAINER} wp option get siteurl` 'http://${STAGING_URL}'
 
 shell_wordpress :
 	docker exec -ti $(WORDPRESS_CONTAINER) /bin/bash

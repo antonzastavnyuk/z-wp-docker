@@ -14,7 +14,7 @@ services:
     networks:
       - back
   wordpress:
-    image: zeroindex/wordpress
+    image: zeroindex/wordpress:latest
     container_name: ${WORDPRESS_CONTAINER}
     depends_on:
       - mariadb
