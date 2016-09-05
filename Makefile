@@ -67,7 +67,7 @@ staging_url :
 	wp search-replace `docker exec -i ${WORDPRESS_CONTAINER} wp option get siteurl` 'http://${STAGING_URL}'
 
 shell_wordpress :
-	docker exec -ti $(WORDPRESS_CONTAINER) /bin/bash
+	docker exec -it $(WORDPRESS_CONTAINER) /bin/bash -c "export TERM=xterm; exec bash"
 
 tail_wordpress :
 	docker logs -f $(WORDPRESS_CONTAINER)
