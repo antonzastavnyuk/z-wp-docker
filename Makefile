@@ -64,7 +64,7 @@ import_db :
 
 staging_url :
 	docker exec -i ${WORDPRESS_CONTAINER} \
-	wp search-replace 'localhost:${PORT}' '${STAGING_URL}' --skip-columns=guid
+	wp search-replace `docker exec -i ${WORDPRESS_CONTAINER} wp option get siteurl` 'http://${STAGING_URL}'
 
 shell_wordpress :
 	docker exec -ti $(WORDPRESS_CONTAINER) /bin/bash
