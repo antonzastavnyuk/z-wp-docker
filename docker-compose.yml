@@ -28,7 +28,7 @@ services:
     restart: always
     environment:
       - WORDPRESS_DB_HOST=mariadb:3306
-      - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
+      - WORDPRESS_DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - WP_DEBUG=true
     networks:
       - front
